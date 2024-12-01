@@ -1,3 +1,15 @@
-1,john doe,prof,2
-2,jon jones,prof,3
-3,mary,prof,4
+EmployeeID	name	position	type	years worked 	salary	
+UL123	John Jones	Full Professor	full time	1	€140,068	
+UL090	Chael sonnen	Professor	full time	1	€101,447	
+UL808	Daniel Cormier	Teaching ast	part-time	1	€37,010	
+UL222	Islam Makac	Associate prof	part-time	1	€62,069	
+UL129	Mehrajul islam	Assistant prof	part-time	3	€77,006	
+UL888	Tasen islam	Full Professor	full time	6	€177,078	
+UL345	Zuhaib butt	Vice President	full time	6	€184,171	
+UL903	Mush rahman	President	full time	6	€240,716	
+UL441	Luffy Hossain	Professor	full time	4	121,935	
+UL999	Abdul Azeez	Professor	full time	4	121,935	
+UL401	Diaz Knotts	Teaching ast	part-time	1	37,010	
+UL100	Lionel Messi	Full Professor	full time	6	177,078	
+UL619	Yu Ling Ling	Professor	part-time	1	101,447	
+UL911	Diddy DJ	Associate prof	part-time	1	62,069	
