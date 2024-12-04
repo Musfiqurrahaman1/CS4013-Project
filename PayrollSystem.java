@@ -4,37 +4,63 @@ import java.util.*;
 public class PayrollSystem {
     private List<Employee> employees;
     private Deductions deductions;
-
-    String csvFilePath = "/Users/jusmiruddin/Desktop/new.csv";
+    private String csvFilePath;
 
     // Constructor
-    public PayrollSystem(String csvFilePath , Deductions deductions) throws IOException {
-        this.employees = loadEmployeesFromCSV(csvFilePath);
+    public PayrollSystem(String csvFilePath, Deductions deductions) throws IOException {
+        this.csvFilePath = csvFilePath;
         this.deductions = deductions;
+        this.employees = loadEmployeesFromCSV(csvFilePath);
     }
 
-    // Load employees from CSV
+
+
+    // gets the employees from CSV
     private List<Employee> loadEmployeesFromCSV(String csvFilePath) throws IOException {
         List<Employee> employees = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(csvFilePath))) {
             String line;
+            br.readLine(); // Skip the tittle lines at the very top
             while ((line = br.readLine()) != null) {
                 String[] data = line.split(",");
-                Employee emp = new Employee(data[0], data[1], data[2], Integer.parseInt(data[3]),
-                        Double.parseDouble(data[3]));
+                String employeeID = data[0];
+                String name = data[1];
+                String position = data[2];
+                double salary = Double.parseDouble(data[3]);
+                int yearsWorked = Integer.parseInt(data[4]);
+                double hourlyRate = Double.parseDouble(data[5]);
+                int hoursWorked = Integer.parseInt(data[6]);
+
+                Employee emp = new Employee(employeeID, name, position, salary, yearsWorked, hourlyRate, hoursWorked);
                 employees.add(emp);
             }
         }
         return employees;
+
+
     }
 
-    // Generate and display payslip for an employee
+    // makes and display a payslip for an employee
     public void generatePayslip(String employeeID) {
         for (Employee emp : employees) {
             if (emp.getEmployeeID().equals(employeeID)) {
-                double grossSalary = emp.getSalary();
-                double totalDeductions = deductions.calculateDeductions(grossSalary);
-                Payslip payslip = new Payslip(emp, grossSalary, totalDeductions);
+                double grossPay = emp.getHourlyRate() > 0
+                        ? emp.getHourlyRate() * emp.getHoursWorked()
+                        : emp.getSalary();
+
+
+                // Calculate tax deductions
+                double incomeTax = deductions.calculateIncomeTax(grossPay);
+                double prsi = deductions.calculatePRSI(grossPay);
+                double usc = deductions.calculateUSC(grossPay);
+                double healthInsurance = deductions.getHealthInsuranceFee();
+                double unionFee = deductions.getUnionFee();
+                double totalDeductions = incomeTax + prsi + usc + healthInsurance + unionFee;
+
+                // make and show payslip
+                Payslip payslip = new Payslip(emp, grossPay, totalDeductions,
+                        incomeTax, healthInsurance, unionFee,
+                        prsi, usc);
                 payslip.displayPayslip();
                 return;
             }
@@ -42,9 +68,35 @@ public class PayrollSystem {
         System.out.println("Employee not found!");
     }
 
-    // Add employee (Admin functionality)
+
+    // Add a new employee and save to the CSV
     public void addEmployee(Employee emp) {
         employees.add(emp);
-        // Save to CSV logic here
+        saveEmployeesToCSV();
+        System.out.println("Employee added successfully!");
+    }
+
+    // Save employees to CSV
+    private void saveEmployeesToCSV() {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(csvFilePath))) {
+            // Write the header
+            bw.write("Employee ID,Name,Position,Salary,Years Worked,Hourly Rate,Hours Worked");
+            bw.newLine();
+
+            // Write employee data
+            for (Employee emp : employees) {
+                bw.write(emp.getEmployeeID() + "," +
+                        emp.getName() + "," +
+                        emp.getPosition() + "," +
+                        emp.getSalary() + "," +
+                        emp.getYearsWorked() + "," +
+                        emp.getHourlyRate() + "," +
+                        emp.getHoursWorked());
+                bw.newLine();
+            }
+        } catch (IOException e) {
+            System.out.println("Error saving to CSV: " + e.getMessage());
+        }
     }
 }
+
