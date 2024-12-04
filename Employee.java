@@ -2,24 +2,53 @@ public class Employee {
     private String employeeID;
     private String name;
     private String position;
-    private int yearsWorked;
     private double salary;
+    private int yearsWorked;
+    private double hourlyRate;
+    private int hoursWorked;
 
     // Constructor
-    public Employee(String employeeID, String name, String position, int yearsWorked, double salary) {
+    public Employee(String employeeID, String name, String position, double salary, int yearsWorked, double hourlyRate, int hoursWorked) {
         this.employeeID = employeeID;
         this.name = name;
         this.position = position;
-        this.yearsWorked = yearsWorked;
         this.salary = salary;
+        this.yearsWorked = yearsWorked;
+        this.hourlyRate = hourlyRate;
+        this.hoursWorked = hoursWorked;
     }
 
-    // Getters and Setters
-    public String getEmployeeID() { return employeeID; }
-    public String getName() { return name; }
-    public String getPosition() { return position; }
-    public int getYearsWorked() { return yearsWorked; }
-    public double getSalary() { return salary; }
+    // Getters
+    public String getEmployeeID() {
+        return employeeID;
+    }
 
-    public void setSalary(double salary) { this.salary = salary; }
+    public String getName() {
+        return name;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public double getSalary() {
+        return salary;
+    }
+
+    public int getYearsWorked() {
+        return yearsWorked;
+    }
+
+    public double getHourlyRate() {
+        return hourlyRate;
+    }
+
+    public int getHoursWorked() {
+        return hoursWorked;
+    }
+
+    // String version of the Employee for CSV writing
+    public String toCSV() {
+        return employeeID + "," + name + "," + position + "," + salary + "," + yearsWorked + "," + hourlyRate + "," + hoursWorked;
+    }
 }
